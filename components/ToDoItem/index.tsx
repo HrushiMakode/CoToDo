@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { TouchableWithoutFeedback } from "react-native";
 import { View, TextInput } from "react-native";
 import { Appearance } from "react-native-appearance";
 import CheckBox from "../Checkbox";
@@ -40,35 +41,41 @@ const TodoItem = ({ todo, onSubmit }: ToDoItemProps) => {
 	};
 
 	return (
-		<View
-			style={{ flexDirection: "row", alignItems: "center", marginVertical: 5 }}
-		>
-			{/* //ToDo CheckBox */}
-
-			<CheckBox
-				isChecked={isChecked}
-				onPress={() => {
-					setIsChecked(!isChecked);
-				}}
-			/>
-
-			{/* //ToDo Text Input */}
-			<TextInput
-				ref={input}
-				value={content}
-				onChangeText={setContent}
+		<TouchableWithoutFeedback>
+			<View
 				style={{
-					flex: 1,
-					fontSize: 18,
-					color: modeBasedColor,
-					marginLeft: 12,
+					flexDirection: "row",
+					alignItems: "center",
+					marginVertical: 5,
 				}}
-				multiline
-				onSubmitEditing={onSubmit}
-				blurOnSubmit
-				onKeyPress={onkeypress}
-			/>
-		</View>
+			>
+				{/* //ToDo CheckBox */}
+
+				<CheckBox
+					isChecked={isChecked}
+					onPress={() => {
+						setIsChecked(!isChecked);
+					}}
+				/>
+
+				{/* //ToDo Text Input */}
+				<TextInput
+					ref={input}
+					value={content}
+					onChangeText={setContent}
+					style={{
+						flex: 1,
+						fontSize: 18,
+						color: modeBasedColor,
+						marginLeft: 12,
+					}}
+					multiline
+					onSubmitEditing={onSubmit}
+					blurOnSubmit
+					onKeyPress={onkeypress}
+				/>
+			</View>
+		</TouchableWithoutFeedback>
 	);
 };
 

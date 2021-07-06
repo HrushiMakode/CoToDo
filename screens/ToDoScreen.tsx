@@ -1,32 +1,30 @@
 import * as React from "react";
 import { useState } from "react";
-import { View } from "react-native";
 import {
-	Platform,
+	Keyboard,
+	View,
 	FlatList,
 	StyleSheet,
 	TextInput,
-	KeyboardAvoidingView,
-	ScrollView,
+	TouchableWithoutFeedback,
 } from "react-native";
 
 import { Appearance } from "react-native-appearance";
 
 import TodoItem from "../components/ToDoItem";
 
-let id = "4";
 let colorScheme = Appearance.getColorScheme();
 console.table(colorScheme);
 let modeBasedColor = colorScheme === "light" ? "black" : "white";
 
-export default function TabOneScreen() {
+export default function ToDoScreen() {
 	const [title, setTitle] = useState("Why");
 
 	const [todos, setTodos] = useState([
 		{
 			id: "1",
 			content: "Buy Milk",
-			isCompleted: false,
+			isCompleted: true,
 		},
 		{
 			id: "2",
@@ -42,21 +40,19 @@ export default function TabOneScreen() {
 
 	const createNewItem = (atIndex: number) => {
 		console.log(`new item ${atIndex}`);
-		const newTodos = [...todos];
-		newTodos.splice(atIndex, 0, {
-			id: String(Math.random() * 1000000000000),
-			content: "",
-			isCompleted: false,
+		setTodos((todos) => {
+			const newTodos = [...todos];
+			newTodos.splice(atIndex, 0, {
+				id: String(Math.random() * 1000000000000),
+				content: "",
+				isCompleted: false,
+			});
+			return newTodos;
 		});
-		setTodos(newTodos);
 	};
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
-			keyboardVerticalOffset={Platform.OS === "ios" ? 130 : 150}
-			style={{ flex: 1 }}
-		>
+		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 			{/* <ScrollView contentContainerStyle={{ flex: 1 }}> */}
 			<View style={styles.container}>
 				<TextInput
@@ -79,7 +75,7 @@ export default function TabOneScreen() {
 				/>
 			</View>
 			{/* </ScrollView> */}
-		</KeyboardAvoidingView>
+		</TouchableWithoutFeedback>
 	);
 }
 

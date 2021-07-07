@@ -17,7 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 import { gql, useMutation } from "@apollo/client";
 import KeyboardAvoidingWrapper from "../components/UI-Helper/KeyboardAvoidingWrapper";
 import { Alert } from "react-native";
-import { AsyncStorage } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SIGN_UP_MUTATION = gql`
 	mutation signUp($email: String!, $password: String!, $name: String!) {
@@ -54,8 +54,11 @@ export default function SignUpScreen() {
 
 	if (data) {
 		// Save Token
-		// Navogate to home
-		navigation.navigate("Home");
+
+		AsyncStorage.setItem("token", data.signUp.token).then(() => {
+			// Navogate to home
+			navigation.navigate("Home");
+		});
 	}
 
 	const onSubmit = () => {

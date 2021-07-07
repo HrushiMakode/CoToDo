@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Appearance, FlatList, StyleSheet } from "react-native";
 import ProjectItem from "../components/ProjectItem";
 import { Text, View } from "../components/Themed";
+import KeyboardAvoidingWrapper from "../components/UI-Helper/KeyboardAvoidingWrapper";
 
 let colorScheme = Appearance.getColorScheme();
 console.table(colorScheme);
@@ -28,13 +29,15 @@ export default function ProjectScreen() {
 	]);
 
 	return (
-		<View style={styles.container}>
-			<FlatList
-				data={project}
-				renderItem={({ item }) => <ProjectItem project={item} />}
-				style={{ width: "100%" }}
-			></FlatList>
-		</View>
+		<KeyboardAvoidingWrapper>
+			<View style={styles.container}>
+				<FlatList
+					data={project}
+					renderItem={({ item }) => <ProjectItem project={item} />}
+					style={{ width: "100%" }}
+				></FlatList>
+			</View>
+		</KeyboardAvoidingWrapper>
 	);
 }
 

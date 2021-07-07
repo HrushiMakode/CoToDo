@@ -4,16 +4,33 @@ import {
 	Text,
 	View,
 	TextInput,
-	Image,
 	Dimensions,
 	TouchableOpacity,
-	TouchableWithoutFeedback,
-	Keyboard,
+	ActivityIndicator,
+	SafeAreaView,
+	Button,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Icon } from "react-native-elements";
 import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { gql, useMutation } from "@apollo/client";
+import KeyboardAvoidingWrapper from "../components/UI-Helper/KeyboardAvoidingWrapper";
+import { Alert } from "react-native";
+import { AsyncStorage } from "react-native";
+
+const SIGN_UP_MUTATION = gql`
+	mutation signUp($email: String!, $password: String!, $name: String!) {
+		signUp(input: { email: $email, password: $password, name: $name }) {
+			token
+			user {
+				id
+				name
+				email
+			}
+		}
+	}
+`;
 
 export default function SignUpScreen() {
 	const [email, setEmail] = useState("");
@@ -25,16 +42,42 @@ export default function SignUpScreen() {
 	const input2 = useRef<TextInput>(null);
 	const input3 = useRef<TextInput>(null);
 
+	// * mutation[0]: A function to trigger the mutation
+	// * mutation[1]: result object
+	// * {data,error,loading}
+
+	const [signUp, { data, error, loading }] = useMutation(SIGN_UP_MUTATION);
+
+	if (error) {
+		Alert.alert("Error Signing Up. Try Again");
+	}
+
+	if (data) {
+		// Save Token
+		// Navogate to home
+		navigation.navigate("Home");
+	}
+
 	const onSubmit = () => {
 		//submit
-		console.warn(name, email, password);
+
+		signUp({ variables: { name, email, password } });
+
 		setEmail("");
 		setPassword("");
 		setName("");
 	};
 
+	const loadingIndicator = (
+		<SafeAreaView style={{ flex: 1 }}>
+			<View style={styles.container}>
+				<ActivityIndicator></ActivityIndicator>
+			</View>
+		</SafeAreaView>
+	);
+
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+		<KeyboardAvoidingWrapper>
 			<View style={styles.container}>
 				<StatusBar style="light" backgroundColor="#00235E" />
 				<View style={styles.bigCircle}></View>
@@ -83,9 +126,15 @@ export default function SignUpScreen() {
 								onSubmitEditing={onSubmit}
 							/>
 						</View>
-						<TouchableOpacity style={styles.loginButton} onPress={onSubmit}>
-							<Text style={styles.loginButtonText}>Sign Up</Text>
+						<TouchableOpacity
+							style={styles.loginButton}
+							onPress={onSubmit}
+							disabled={loading}
+						>
+							{loading && <ActivityIndicator size="small" color="white" />}
+							{loading || <Text style={styles.loginButtonText}>Sign Up</Text>}
 						</TouchableOpacity>
+
 						<TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
 							<Text style={styles.registerText}>
 								Already have an account , Sign In
@@ -97,7 +146,7 @@ export default function SignUpScreen() {
 					</View>
 				</View>
 			</View>
-		</TouchableWithoutFeedback>
+		</KeyboardAvoidingWrapper>
 	);
 }
 
@@ -129,7 +178,7 @@ const styles = StyleSheet.create({
 	},
 	centerizedView: {
 		width: "100%",
-		top: "20%",
+		top: "15%",
 	},
 	authBox: {
 		width: "80%",
@@ -213,5 +262,8 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		marginTop: 12,
 		fontSize: 16,
+	},
+	spinnerTextStyle: {
+		color: "#FFF",
 	},
 });

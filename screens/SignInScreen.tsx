@@ -4,16 +4,14 @@ import {
 	Text,
 	View,
 	TextInput,
-	Image,
 	Dimensions,
 	TouchableOpacity,
-	TouchableWithoutFeedback,
-	Keyboard,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Icon } from "react-native-elements";
 import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
+import KeyboardAvoidingWrapper from "../components/UI-Helper/KeyboardAvoidingWrapper";
 
 export default function SignInScreen() {
 	const [email, setEmail] = useState("");
@@ -29,7 +27,7 @@ export default function SignInScreen() {
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+		<KeyboardAvoidingWrapper>
 			<View style={styles.container}>
 				<StatusBar style="light" backgroundColor="#00235E" />
 				<View style={styles.bigCircle}></View>
@@ -79,7 +77,7 @@ export default function SignInScreen() {
 					</View>
 				</View>
 			</View>
-		</TouchableWithoutFeedback>
+		</KeyboardAvoidingWrapper>
 	);
 }
 

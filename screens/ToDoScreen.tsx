@@ -12,6 +12,7 @@ import {
 import { Appearance } from "react-native-appearance";
 
 import TodoItem from "../components/ToDoItem";
+import KeyboardAvoidingWrapper from "../components/UI-Helper/KeyboardAvoidingWrapper";
 
 let colorScheme = Appearance.getColorScheme();
 console.table(colorScheme);
@@ -52,8 +53,7 @@ export default function ToDoScreen() {
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			{/* <ScrollView contentContainerStyle={{ flex: 1 }}> */}
+		<KeyboardAvoidingWrapper>
 			<View style={styles.container}>
 				<TextInput
 					style={styles.title}
@@ -74,8 +74,7 @@ export default function ToDoScreen() {
 					}}
 				/>
 			</View>
-			{/* </ScrollView> */}
-		</TouchableWithoutFeedback>
+		</KeyboardAvoidingWrapper>
 	);
 }
 

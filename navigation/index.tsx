@@ -20,6 +20,7 @@ import ProjectScreen from "../screens/ProjectScreen";
 import ToDoScreen from "../screens/ToDoScreen";
 import { RootStackParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import SplashScreen from "../screens/SplashScreen";
 
 export default function Navigation({
 	colorScheme,
@@ -44,11 +45,18 @@ function RootNavigator() {
 	return (
 		<Stack.Navigator>
 			<Stack.Screen
+				name="Splash"
+				component={SplashScreen}
+				options={{
+					headerShown: false,
+				}}
+			/>
+
+			<Stack.Screen
 				name="SignIn"
 				component={SignInScreen}
 				options={{
 					headerShown: false,
-					title: "Sign In",
 				}}
 			/>
 
@@ -57,7 +65,6 @@ function RootNavigator() {
 				component={SignUpScreen}
 				options={{
 					headerShown: false,
-					title: "Sign In",
 				}}
 			/>
 
